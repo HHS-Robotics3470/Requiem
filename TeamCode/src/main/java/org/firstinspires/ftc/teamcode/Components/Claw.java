@@ -1,33 +1,40 @@
 package org.firstinspires.ftc.teamcode.Components;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Claw implements Component {
 
     private LinearOpMode myOpMode;
     private Servo clawServo;
-    private Servo wristServo;
+    private DcMotorEx wristMotor;
+    private ElapsedTime wristTimer = new ElapsedTime();
+    private boolean wristMoving = false;
+    private boolean isWristUp = false;
 
     private final double CLAW_OPEN_POSITION = 0.98;
     private final double CLAW_CLOSE_POSITION = 1.0;
     private final int WRIST_UP_POSITION = 0;
     private final int WRIST_DOWN_POSITION = 1;
 
-    private boolean isWristUp = false;  // Toggle state for wrist
     private boolean isClawOpen = false; // Track claw open/close state
 
     @Override
     public void init(RobotHardware robotHardware) {
         myOpMode = robotHardware.myOpMode;
-        wristServo = robotHardware.wristServo;
+        wristMotor = robotHardware.wristMotor;
         clawServo = robotHardware.clawServo;
 
-        clawServo.setPosition(CLAW_CLOSE_POSITION);
-        wristServo.setPosition(WRIST_UP_POSITION);
+        wristMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     // Toggle claw open/close state
+
+
     public void toggleClaw() {
         isClawOpen = !isClawOpen;  // Toggle claw state
 
@@ -50,17 +57,8 @@ public class Claw implements Component {
         return clawServo.getPosition();
     }
 
-    public double getWristPos() {
-        return wristServo.getPosition();
-    }
 
     // Toggle wrist position when 'Y' is pressed
-    public void toggleWrist() {
-        if (isWristUp) {
-            wristServo.setPosition(WRIST_UP_POSITION);
-        } else {
-            wristServo.setPosition(WRIST_DOWN_POSITION);
-        }
-        isWristUp = !isWristUp;  // Toggle wrist state
-    }
+
+
 }

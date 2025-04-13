@@ -16,6 +16,7 @@ public class RobotHardware {
 public Servo clawServo;
         public Servo wristServo;
 
+        public DcMotorEx wristMotor;
     public DcMotorEx fLeft;
     public DcMotorEx fRight;
     public DcMotorEx bLeft;
@@ -37,12 +38,12 @@ public Servo clawServo;
         fRight = myOpMode.hardwareMap.get(DcMotorEx.class, "fRight");
         bLeft = myOpMode.hardwareMap.get(DcMotorEx.class, "bLeft");
         bRight = myOpMode.hardwareMap.get(DcMotorEx.class, "bRight");
+        wristMotor = myOpMode.hardwareMap.get(DcMotorEx.class, "wristMotor");
         lLift = myOpMode.hardwareMap.get(DcMotorEx.class, "lLift");
         rLift = myOpMode.hardwareMap.get(DcMotorEx.class, "rLift");
 
 //init servos
         clawServo = myOpMode.hardwareMap.get(Servo.class, "clawServo");
-        wristServo = myOpMode.hardwareMap.get(Servo.class, "wristServo");
 
 
 

@@ -16,7 +16,6 @@ public class AutoAttemptUno extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-robot.mecnum.MotorStop();
         }
     }
 }

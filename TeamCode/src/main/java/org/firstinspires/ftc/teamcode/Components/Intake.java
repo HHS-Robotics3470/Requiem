@@ -15,7 +15,7 @@ public class Intake implements Component {
     public final double PITCH_INTAKING = 0;
     public final double PITCH_INTAKE_READY = 0.08;
     public final double PITCH_REST = 0.0588;
-    private final double INTAKE_CLAW_OPEN_POSITION = 0.2;
+    private final double INTAKE_CLAW_OPEN_POSITION = 0.15;
     private final double INTAKE_CLAW_CLOSE_POSITION = 0.015;
 
     public final double SWEEPER_INITIAL_POSITION = 0.008;

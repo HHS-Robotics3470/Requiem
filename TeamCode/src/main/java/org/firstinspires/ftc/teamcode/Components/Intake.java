@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class Intake implements Component {
+public class Intake {
 
     public final double PITCH_DOWN = 0.08;
     public final double PITCH_UP = 0.05;
@@ -38,7 +38,6 @@ public class Intake implements Component {
     public Servo fourBarPitch;
 
     // Initialize the intake motor and pitch servo using RobotHardware
-    @Override
     public void init(RobotHardware robotHardware) {
         clawIntake = robotHardware.clawIntake;
         intakePitch = robotHardware.intakePitch; // Assuming intakePitch is defined as a Servo in RobotHardware

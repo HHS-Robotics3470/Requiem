@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
-public class Mecnum implements Component {
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+public class Mecnum implements Component{
     private RobotHardware robotHardware;
 
     public final double DRIVE_SPEED_MAX = 0.95;
@@ -23,14 +25,13 @@ public class Mecnum implements Component {
     public DcMotorEx bLeft;
     public DcMotorEx bRight;
 
-    @Override
-    public void init(RobotHardware robotHardware) {
-        this.robotHardware = robotHardware;
 
-        fLeft = robotHardware.fLeft;
-        fRight = robotHardware.fRight;
-        bLeft = robotHardware.bLeft;
-        bRight = robotHardware.bRight;
+    @Override
+    public void init(HardwareMap hardwareMap) {
+        fLeft = hardwareMap.get(DcMotorEx.class, "fLeft");
+        fRight = hardwareMap.get(DcMotorEx.class, "fRight");
+        bLeft = hardwareMap.get(DcMotorEx.class, "bLeft");
+        bRight = hardwareMap.get(DcMotorEx.class, "bRight");
 
         fLeft.setDirection(DcMotorEx.Direction.REVERSE);
         fRight.setDirection(DcMotorEx.Direction.FORWARD);

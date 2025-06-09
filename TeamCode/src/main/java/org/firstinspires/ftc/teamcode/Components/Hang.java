@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
-public class Hang implements Component{
+public class Hang{
     private DcMotorEx hangMotor;
     private Servo hangLock1;
     private Servo hangLock2;
@@ -12,7 +12,7 @@ public class Hang implements Component{
     private final double UNLOCK_POS= 0.13;
     //Hang Position Tweaking
 //
-    @Override
+
     public void init(RobotHardware robotHardware) {
         hangMotor = robotHardware.hangMotor;
         hangLock1 = robotHardware.lock1;

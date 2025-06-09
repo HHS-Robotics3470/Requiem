@@ -9,10 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-public class Lifts implements Component {
+public class Lifts implements Component{
     private final int liftShift = HoldLastLift.getHeight();
     //
     private final int LIFT_LOW = 0;
@@ -23,8 +24,13 @@ public class Lifts implements Component {
     private final int LIFT_SPEC_AUTO = 1400;
     private final int LIFT_TELEOP_SPECIMEN = 907;
     private final int LIFT_BASKET = 3800;
-    private final double LOCK_OPEN = 1;
-    private final double LOCK_CLOSE = 0;
+    private final double REXTENDO_IN = 0;
+    private final double REXTENDO_OUT = 0.5;
+    private final double LEXTENDO_IN = 0;
+    private final double LEXTENDO_OUT = 0.5;
+
+
+
     public enum LIFT_STATE{
         INACTIVE,
         MOVING_HIGH,
@@ -46,38 +52,38 @@ public class Lifts implements Component {
     public TouchSensor touch2;
 
     // Horizontal extension motor
-    public DcMotorEx extendo;
+    public Servo Lextendo;
+    public Servo Rextendo;
 
     // Init function
-    public void init(RobotHardware robotHardware) {
+    @Override
+    public void init(HardwareMap hardwareMap) {
         // Initialize lift motors from RobotHardware
-        myOpMode = robotHardware.myOpMode;
-        lLift = robotHardware.lLift;
-        rLift = robotHardware.rLift;
-        extendo = robotHardware.extendo;
-        lock = robotHardware.liftLock;
-        touch1 = robotHardware.touch1;
-        touch2 = robotHardware.touch2;
+        lLift = hardwareMap.get(DcMotorEx.class, "lLift");
+        rLift = hardwareMap.get(DcMotorEx.class, "rLift");
+        Rextendo =  hardwareMap.get(Servo.class, "Rextendo");
+        Lextendo =  hardwareMap.get(Servo.class, "Lextendo");
+        touch1 = hardwareMap.get(TouchSensor.class, "touch1");
+        touch2 = hardwareMap.get(TouchSensor.class, "touch2");
+
+        Lextendo.setDirection(Servo.Direction.REVERSE);
 
         lLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //
         lLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set motor direction for extendo (adjust as necessary)
         lLift.setDirection(DcMotorSimple.Direction.FORWARD);
         rLift.setDirection(DcMotorSimple.Direction.FORWARD);
-        extendo.setDirection(DcMotor.Direction.FORWARD);
-
-//
+        Lextendo.setPosition(LEXTENDO_IN);
+        Rextendo.setPosition(REXTENDO_IN);
         current_state = LIFT_STATE.INACTIVE;
-        moveLiftsToZero();
+//        moveLiftsToZero();
     }
 
     // Raise Lift function
@@ -112,14 +118,14 @@ public class Lifts implements Component {
         rLift.setPower(0);
     }
 
-    public void forwardLift() {
-        if (extendo.getCurrentPosition() < LIFT_FORWARD) {
-            extendo.setTargetPosition(LIFT_FORWARD);
-            extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            extendo.setPower(1);
-        }
-    }
+//    public void forwardLift() {
+//        if (extendo.getCurrentPosition() < LIFT_FORWARD) {
+//            extendo.setTargetPosition(LIFT_FORWARD);
+//            extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            extendo.setPower(1);
+//        }
+//    }
 
     public void GoToPositionVertical(int target)
     {
@@ -172,101 +178,104 @@ public class Lifts implements Component {
         rLift.setPower(1.0);
     }
 
-    public void GoToPositionHorizontal(int target){
-        while (extendo.getCurrentPosition() != target)
-        {
-            extendo.setTargetPosition(target);
-
-
-            extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-            extendo.setPower(1);
-
-        }
+//extendo code
+   public void Bextendo_in(){
+       Rextendo.setPosition(REXTENDO_IN);
+               Lextendo.setPosition(LEXTENDO_IN);
     }
+    public void Bextendo_out(){
+        Rextendo.setPosition(REXTENDO_OUT);
+        Lextendo.setPosition(LEXTENDO_OUT);
+    }
+
+
+
+
+//    public void GoToPositionHorizontal(int target){
+//        while (extendo.getCurrentPosition() != target)
+//        {
+//            extendo.setTargetPosition(target);
+//
+//
+//            extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//
+//            extendo.setPower(1);
+//
+//        }
+//    }
 
     // New function to move lifts down to position 0 until a TouchSensor is pressed
-    public void moveLiftsToZero() {
-        lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        lLift.setPower(-1);
-        rLift.setPower(-1);
-
-        while (!touch1.isPressed() && !touch2.isPressed()) {
-            // Wait until one of the touch sensors is pressed
-        }
+//    public void moveLiftsToZero() {
+//        lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //
-        lLift.setPower(0);
-        rLift.setPower(0);
-
-        lLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        lLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-
-
-
-
-
-
-
-
+//        lLift.setPower(-1);
+//        rLift.setPower(-1);
+//
+//        while (!touch1.isPressed() && !touch2.isPressed()) {
+//            // Wait until one of the touch sensors is pressed
+//        }
+////
+//        lLift.setPower(0);
+//        rLift.setPower(0);
+//
+//        lLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        lLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//    }
 
 
 
 
-    // Lower Lift function
-    public void backLift() {
-        if (extendo.getCurrentPosition() > LIFT_BACK) {
-            extendo.setTargetPosition(LIFT_BACK);
-            extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            extendo.setPower(1);
-        }
-    }
-
-    // Stop Lift function
-    public void stopLiftHorizontal() {
-        extendo.setTargetPosition(extendo.getCurrentPosition());
-    }
-
-    public void lockOpen()
-    {
-        lock.setPosition(LOCK_OPEN);
-    }
-
-    public void lockClose()
-    {
-        lock.setPosition(LOCK_CLOSE);
-    }
 
 
-    //    // New function for horizontal extension
-    public void extendHorizontally(RobotHardware robotHardware) {
-        // Initialize extendo motor from RobotHardware
-        extendo = robotHardware.extendo;
 
-        // Reset encoder position for extendo
-        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Set motor direction for extendo (adjust as necessary)
-        extendo.setDirection(DcMotor.Direction.FORWARD);
-    }
 
-    // Function to set position for the extendo motor
-    public void setExtendoPosition(int position, double power) {
-        extendo.setTargetPosition(position);
-        extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        extendo.setPower(power);
-    }
+
+
+
+//
+//    // Lower Lift function
+//    public void backLift() {
+//        if (extendo.getCurrentPosition() > LIFT_BACK) {
+//            extendo.setTargetPosition(LIFT_BACK);
+//            extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            extendo.setPower(1);
+//        }
+//    }
+//
+//    // Stop Lift function
+//    public void stopLiftHorizontal() {
+//        extendo.setTargetPosition(extendo.getCurrentPosition());
+//    }
+//
+//
+//    //    // New function for horizontal extension
+//    public void extendHorizontally(RobotHardware robotHardware) {
+//        // Initialize extendo motor from RobotHardware
+//        extendo = robotHardware.extendo;
+//
+//        // Reset encoder position for extendo
+//        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        // Set motor direction for extendo (adjust as necessary)
+//        extendo.setDirection(DcMotor.Direction.FORWARD);
+//    }
+
+//    // Function to set position for the extendo motor
+//    public void setExtendoPosition(int position, double power) {
+//        extendo.setTargetPosition(position);
+//        extendo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        extendo.setPower(power);
+//    }
 
     public boolean isSortOfEqual(int lifts, int target, int error)
     {

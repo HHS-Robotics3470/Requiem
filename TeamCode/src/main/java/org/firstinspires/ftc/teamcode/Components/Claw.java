@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Components;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public class Claw implements Component{
+public class Claw{
     private LinearOpMode myOpMode;
     private Servo clawServo;     // Servo to open/close the claw
     private Servo armRight;
@@ -62,7 +64,6 @@ public class Claw implements Component{
 
     ;// Adjust as needed for your pitch servo
 
-    @Override
     public void init(RobotHardware robotHardware) {
         myOpMode = robotHardware.myOpMode;
         wrist = robotHardware.wrist;

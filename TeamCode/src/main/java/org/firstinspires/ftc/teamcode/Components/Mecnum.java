@@ -28,11 +28,13 @@ public class Mecnum implements Component{
 
     @Override
     public void init(HardwareMap hardwareMap) {
+        //get hardware objects from hardwaremap
         fLeft = hardwareMap.get(DcMotorEx.class, "fLeft");
         fRight = hardwareMap.get(DcMotorEx.class, "fRight");
         bLeft = hardwareMap.get(DcMotorEx.class, "bLeft");
         bRight = hardwareMap.get(DcMotorEx.class, "bRight");
 
+        //set up moters
         fLeft.setDirection(DcMotorEx.Direction.REVERSE);
         fRight.setDirection(DcMotorEx.Direction.FORWARD);
         bLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -46,6 +48,7 @@ public class Mecnum implements Component{
         stopAllMotors();  // Ensure motors are off after initialization
     }
 
+    //stops moters
     public void stopAllMotors() {
         fLeft.setPower(0);
         fRight.setPower(0);

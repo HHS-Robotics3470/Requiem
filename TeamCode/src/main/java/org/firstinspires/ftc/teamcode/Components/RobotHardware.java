@@ -24,40 +24,22 @@ public class RobotHardware {
         myOpMode = opMode;
 
     }
-    //sensors
 
-
-
-    // Motors
-    public DcMotorEx fLeft;
-    public DcMotorEx fRight;
-    public DcMotorEx bLeft;
-    public DcMotorEx bRight;
-    public DcMotorEx extendo;
     public DcMotorEx hangMotor;
-    public DcMotorEx lLift;
-    public DcMotorEx rLift;
 
-    //Sensors
-    public TouchSensor touch1;
-    public TouchSensor touch2;
 
-    // Servo for intake pitch control
     public Servo intakePitch;
-    //    public CRServoImpl roller;
+
     public Servo clawServo;
     public Servo wrist;
     public Servo armRight;
     public Servo armLeft;
     public Servo lock1;
     public Servo lock2;
-    public Servo liftLock;
-    public Servo sweeper;
     public Servo intakeWrist;
     public Servo clawIntake;
     public Servo fourBarPitch;
-    public Servo Lextendo;
-    public Servo Rextendo;
+
 
 
     //SubSystems Intake and others
@@ -70,7 +52,6 @@ public class RobotHardware {
 
 
     public void init() {
-        // Initialize drive motors
 
 
         hangMotor = myOpMode.hardwareMap.get(DcMotorEx.class, "hang");

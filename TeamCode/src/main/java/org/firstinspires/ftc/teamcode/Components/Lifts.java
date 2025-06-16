@@ -11,10 +11,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 public class Lifts implements Component{
     //Lift constants
     private final int LIFT_LOW = 0;
-    private final int LIFT_HIGH = 4100;
+    private final int LIFT_HIGH = -1600;
     private final double EXTENDO_IN = 0;
-    private final double EXTENDO_OUT = 0.5;
-
+    private final double EXTENDO_OUT = 0.35;
     // Vertical Lift motors
     private DcMotorEx lLift;
     private DcMotorEx rLift;
@@ -50,7 +49,7 @@ public class Lifts implements Component{
 
         Lextendo.setDirection(Servo.Direction.REVERSE);
 
-        lLift.setDirection(DcMotorSimple.Direction.FORWARD);
+        lLift.setDirection(DcMotorSimple.Direction.REVERSE);
         rLift.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Initialize moters and servos to starting positon
@@ -62,13 +61,14 @@ public class Lifts implements Component{
 
     // Raise Lift function
     public void raiseLift() {
-        if (lLift.getCurrentPosition() < LIFT_HIGH && rLift.getCurrentPosition() < LIFT_HIGH) {
+        if (lLift.getCurrentPosition() > LIFT_HIGH && rLift.getCurrentPosition() > LIFT_HIGH) {
             rLift.setTargetPosition(LIFT_HIGH);
             lLift.setTargetPosition(LIFT_HIGH);
             rLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             lLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rLift.setPower(1);
-            lLift.setPower(1);
+            rLift.setPower(-1);
+            lLift.setPower(-1);
+
         }
     }
 
@@ -79,8 +79,8 @@ public class Lifts implements Component{
             lLift.setTargetPosition(LIFT_LOW);
             rLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             lLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rLift.setPower(1);
-            lLift.setPower(1);
+            rLift.setPower(0.5);
+            lLift.setPower(0.5);
         }
     }
 
